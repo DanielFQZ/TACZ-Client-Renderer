@@ -30,6 +30,7 @@ Minecraft **26.2 / Fabric / Java 25** 的纯客户端第一人称物品渲染器
 
 这些例子要求你自己提供对应 display、模型、贴图和动画。资产的 TACZ 目录和配置格式保持原样。
 切换时播放 draw/put_away，I 检视、R 换弹（仅视觉）；工具可单独映射攻击、挖掘和使用动作。
+0.1.1 起支持疾跑起步、循环、腾空持枪和停跑动画，并读取 TACZ display 的 `default_animation` / `use_default_animation`。缺省动画文件也需用户自行提供，详见 [Wiki 动作说明](https://github.com/DanielFQZ/TACZ-Client-Renderer/wiki/Actions-and-Examples)。
 
 ## 可选工具示例
 

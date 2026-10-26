@@ -76,10 +76,16 @@ public final class TaczGunRenderer {
                 ? null : definition.clip(clipName(stack, action));
         // TACZ keeps static_idle on a base track. Shoot is an additive track;
         // draw/reload/inspect replace only the channels they actually animate.
-        AnimationClip animation = selected == null ? base : selected.withBase(base,
-                (action == ClientActionController.Action.ATTACK || action == ClientActionController.Action.MINE)
-                        && clipName(stack, action).equals("shoot"));
+        AnimationClip animation = layer(stack, selected, base, action);
         float animationTime = selected == null ? 0 : ClientActionController.progress(tickDelta) * selected.length;
+        if (definition != null && animation != null && ClientActionController.blend(tickDelta) < 1) {
+            var previousAction = ClientActionController.previousAction();
+            AnimationClip previous = previousAction == ClientActionController.Action.IDLE
+                    ? null : definition.clip(clipName(stack, previousAction));
+            float previousTime = previous == null ? 0 : ClientActionController.previousProgress() * previous.length;
+            animation = animation.blendFrom(layer(stack, previous, base, previousAction), previousTime,
+                    ClientActionController.blend(tickDelta));
+        }
         float scale = firstPersonScale(json);
         poseStack.pushPose();
         // Convert TACZ's Y-down model space to the first-person camera space,
@@ -109,10 +115,30 @@ public final class TaczGunRenderer {
                 .map(mapping -> mapping.clip(action.key, action.defaultClip)).orElse(action.defaultClip);
     }
 
+    private static AnimationClip layer(ItemStack stack, AnimationClip clip, AnimationClip base,
+                                       ClientActionController.Action action) {
+        return clip == null ? base : clip.withBase(base, action.movement()
+                || (action == ClientActionController.Action.ATTACK || action == ClientActionController.Action.MINE)
+                && clipName(stack, action).equals("shoot"));
+    }
+
     private static Animation definition(ItemStack stack, JsonObject display) {
         Identifier animation = ClientItemOverrideRegistry.INSTANCE.get(stack).map(ClientItemOverride::animation)
                 .orElseGet(() -> id(display, "animation"));
-        return animation == null || resources == null ? null : ANIMATIONS.computeIfAbsent(animation, TaczGunRenderer::loadAnimation);
+        if (resources == null) return null;
+        Animation primary = animation == null ? null : ANIMATIONS.computeIfAbsent(animation, TaczGunRenderer::loadAnimation);
+        Identifier fallbackId = defaultAnimationId(display);
+        Animation fallback = fallbackId == null ? null : ANIMATIONS.computeIfAbsent(fallbackId, TaczGunRenderer::loadAnimation);
+        return primary == null ? fallback : new Animation(primary.clips, fallback);
+    }
+
+    static Identifier defaultAnimationId(JsonObject display) {
+        Identifier explicit = id(display, "default_animation");
+        if (explicit != null) return explicit;
+        String type = display.has("use_default_animation") && !display.get("use_default_animation").isJsonNull()
+                ? display.get("use_default_animation").getAsString() : "";
+        return type.equals("rifle") || type.equals("pistol")
+                ? Identifier.fromNamespaceAndPath("tacz", type + "_default") : null;
     }
 
     /** Resolve before the action starts, even when the item is no longer held. */
@@ -173,13 +199,14 @@ public final class TaczGunRenderer {
         try {
             Optional<Resource> resource = resources.getResource(file);
             if (resource.isEmpty()) {
-                return null;
+                LOGGER.warn("TACZ animation {} is missing; supply {} in a resource pack", animationId, file);
+                return new Animation(Map.of());
             }
             try (Reader reader = resource.get().openAsReader()) {
                 JsonObject root = com.google.gson.JsonParser.parseReader(reader).getAsJsonObject();
                 JsonObject animations = root.getAsJsonObject("animations");
                 if (animations == null) {
-                    return null;
+                    return new Animation(Map.of());
                 }
                 Map<String, AnimationClip> clips = new HashMap<>();
                 for (Map.Entry<String, JsonElement> animationEntry : animations.entrySet()) {
@@ -205,7 +232,7 @@ public final class TaczGunRenderer {
             }
         } catch (Exception e) {
             LOGGER.warn("Unable to load TACZ animation {}", animationId, e);
-            return null;
+            return new Animation(Map.of());
         }
     }
 
@@ -412,27 +439,47 @@ public final class TaczGunRenderer {
                 (float) Math.toRadians(degrees[1]), (float) Math.toRadians(degrees[0]));
     }
 
-    private record Animation(Map<String, AnimationClip> clips) {
+    private record Animation(Map<String, AnimationClip> clips, Animation fallback) {
+        private Animation(Map<String, AnimationClip> clips) { this(clips, null); }
         private AnimationClip clip(String name) {
-            return clips.get(name);
+            // An empty action explicitly disables it, including fallback lookup.
+            if (name.isEmpty()) return null;
+            AnimationClip clip = clips.get(name);
+            return clip != null || fallback == null ? clip : fallback.clip(name);
         }
     }
 
     private record AnimationClip(float length, Map<String, BoneAnimation> bones,
-                                 AnimationClip base, boolean additive) {
+                                 AnimationClip base, boolean additive,
+                                 AnimationClip previous, float previousTime, float weight) {
         private AnimationClip(float length, Map<String, BoneAnimation> bones) {
-            this(length, bones, null, false);
+            this(length, bones, null, false, null, 0, 1);
         }
 
         private AnimationClip withBase(AnimationClip base, boolean additive) {
-            return new AnimationClip(length, bones, base, additive);
+            return new AnimationClip(length, bones, base, additive, null, 0, 1);
+        }
+
+        private AnimationClip blendFrom(AnimationClip previous, float time, float weight) {
+            return new AnimationClip(length, bones, base, additive, previous, time, weight);
         }
 
         private BoneTransform transform(String bone, float time) {
             BoneAnimation animation = bones.get(bone);
             BoneTransform rest = base == null ? null : base.transform(bone, 0);
-            if (animation == null) return rest;
-            return animation.sample(time, rest, additive);
+            BoneTransform result = animation == null ? rest : animation.sample(time, rest, additive);
+            if (weight >= 1) return result;
+            BoneTransform from = previous == null ? null : previous.transform(bone, previousTime);
+            if (from == null && result == null) return null;
+            if (from == null) from = BoneTransform.identity();
+            if (result == null) result = BoneTransform.identity();
+            return new BoneTransform(mix(from.rotation, result.rotation, weight),
+                    mix(from.position, result.position, weight), mix(from.scale, result.scale, weight));
+        }
+
+        private static float[] mix(float[] from, float[] to, float weight) {
+            return new float[]{from[0] + (to[0] - from[0]) * weight,
+                    from[1] + (to[1] - from[1]) * weight, from[2] + (to[2] - from[2]) * weight};
         }
     }
 
@@ -461,6 +508,9 @@ public final class TaczGunRenderer {
     }
 
     private record BoneTransform(float[] rotation, float[] position, float[] scale) {
+        private static BoneTransform identity() {
+            return new BoneTransform(new float[3], new float[3], new float[]{1, 1, 1});
+        }
     }
 
     private static final class Channel {

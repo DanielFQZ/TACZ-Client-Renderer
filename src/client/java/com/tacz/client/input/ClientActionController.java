@@ -26,7 +26,8 @@ public final class ClientActionController {
             lastLevel = client.level;
             if (player == null) return;
         }
-        TIMELINE.tick(player.getMainHandItem().copy());
+        TIMELINE.tick(player.getMainHandItem().copy(),
+                player.isSprinting() && !player.isUsingItem() && !player.isPassenger(), player.onGround());
         boolean swing = player.swinging && player.swingingArm == InteractionHand.MAIN_HAND;
         if (swing && (!wasSwinging || player.swingTime < lastSwingTime)) {
             boolean use = client.options.keyUse.isDown() && !client.options.keyAttack.isDown();
@@ -55,6 +56,9 @@ public final class ClientActionController {
     public static ItemStack visualItem(ItemStack vanillaStack) { return TIMELINE.shownOr(vanillaStack); }
     public static Action action() { return TIMELINE.action(); }
     public static float progress(float tickDelta) { return TIMELINE.progress(tickDelta); }
+    public static Action previousAction() { return TIMELINE.previousAction(); }
+    public static float previousProgress() { return TIMELINE.previousProgress(); }
+    public static float blend(float tickDelta) { return TIMELINE.blend(tickDelta); }
     public static void reset() {
         TIMELINE.reset();
         wasSwinging = false;
@@ -67,6 +71,10 @@ public final class ClientActionController {
         IDLE("idle", "static_idle", 1),
         DRAW("draw", "draw", 10),
         PUT_AWAY("put_away", "put_away", 8),
+        RUN_START("run_start", "run_start", 6),
+        RUN("run", "run", 16),
+        RUN_HOLD("run_hold", "run_hold", 6),
+        RUN_END("run_end", "run_end", 13),
         ATTACK("attack", "shoot", 10),
         MINE("mine", "shoot", 10),
         USE("use", "", 10),
@@ -76,6 +84,9 @@ public final class ClientActionController {
         public final String key;
         public final String defaultClip;
         public final int defaultTicks;
+        public boolean movement() {
+            return this == RUN_START || this == RUN || this == RUN_HOLD || this == RUN_END;
+        }
         Action(String key, String defaultClip, int defaultTicks) {
             this.key = key; this.defaultClip = defaultClip; this.defaultTicks = defaultTicks;
         }

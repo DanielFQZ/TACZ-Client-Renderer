@@ -95,6 +95,25 @@ public final class RendererRegressionTest {
         same(channel(replaced,"hand","position",0), new float[]{4,5,6});
         Object added = layered(partialLayer, idleLayer, true);
         same(channel(added,"hand","position",0), new float[]{5,7,9});
+        Object blended = call(added, nested("AnimationClip"), "blendFrom",
+                new Class<?>[]{nested("AnimationClip"), float.class, float.class}, idleLayer, 0f, 0.5f);
+        same(channel(blended,"hand","position",0), new float[]{3,4.5f,6});
+        same(channel(blended,"hand","rotation",0), new float[]{90,0,10});
+        Object defaults = construct("Animation", new Class<?>[]{Map.class}, Map.of("run", added, "shoot", added));
+        Object primary = construct("Animation", new Class<?>[]{Map.class, nested("Animation")},
+                Map.of("shoot", partialLayer), defaults);
+        if (call(primary, nested("Animation"), "clip", new Class<?>[]{String.class}, "run") != added
+                || call(primary, nested("Animation"), "clip", new Class<?>[]{String.class}, "shoot") != partialLayer
+                || call(primary, nested("Animation"), "clip", new Class<?>[]{String.class}, "") != null)
+            throw new AssertionError("fallback must fill missing clips only and respect disabled actions");
+        if (!TaczGunRenderer.defaultAnimationId(JsonParser.parseString("""
+                {"use_default_animation":"rifle"}
+                """).getAsJsonObject()).equals(Identifier.parse("tacz:rifle_default"))
+                || !TaczGunRenderer.defaultAnimationId(JsonParser.parseString("""
+                {"use_default_animation":"rifle","default_animation":"custom:movement"}
+                """).getAsJsonObject()).equals(Identifier.parse("custom:movement")))
+            throw new AssertionError("TACZ default animation paths and explicit precedence");
+        System.out.println("PASS: default animation precedence, missing clip fallback and movement blending");
         System.out.println("PASS: channel-wise idle inheritance and additive recoil");
         if (!TaczGunRenderer.textureFile(Identifier.parse("tacz:gun/uv/ak47")).toString()
                 .equals("tacz:textures/gun/uv/ak47.png")) throw new AssertionError("TACZ texture path");
@@ -146,6 +165,21 @@ public final class RendererRegressionTest {
                 }
             }
             System.out.println("PASS: actual AK-47 hands retain static_idle throughout shoot");
+            JsonObject movement = JsonParser.parseString(Files.readString(assets.resolve("animations/rifle_default.animation.json")))
+                    .getAsJsonObject().getAsJsonObject("animations");
+            for (String name : new String[]{"run_start", "run", "run_hold", "run_end"}) {
+                JsonObject json = movement.getAsJsonObject(name);
+                Object running = layered(clip(json), idle, true);
+                float length = json.get("animation_length").getAsFloat();
+                for (int i = 0; i <= 20; i++) {
+                    float time = length * i / 20;
+                    mesh(ak, running, time);
+                    for (String hand : new String[]{"lefthand", "righthand"}) {
+                        same(channel(running, hand, "rotation", time), channel(idle, hand, "rotation", 0));
+                    }
+                }
+            }
+            System.out.println("PASS: AK-47 with external rifle defaults, 84 sprint mesh samples and preserved hand poses");
             int count = 0;
             for (var entry : animations.entrySet()) {
                 JsonObject definition = entry.getValue().getAsJsonObject();

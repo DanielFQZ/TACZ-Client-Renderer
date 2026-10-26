@@ -60,6 +60,53 @@ final class ItemAnimationRegressionTest {
                 {"gun":"tacz:ak47"}
                 """).getAsJsonObject());
         check(gun.clip("attack", "shoot").equals("shoot"), "existing gun mappings remain compatible");
+        sprintChecks();
         System.out.println("PASS: put-away, rapid switching, switch-back, input guards, reload reset, durability and tool mappings");
+    }
+
+    private static void sprintChecks() {
+        var t = new ItemAnimationTimeline<String>(String::equals, "gun"::equals, (item, action) -> 3);
+        t.tick("gun", true, true);
+        check(t.action() == Action.DRAW, "sprint must not interrupt equip");
+        for (int i = 0; i < 3; i++) t.tick("gun", true, true);
+        check(t.action() == Action.RUN_START, "held sprint starts after draw");
+        for (int i = 0; i < 3; i++) t.tick("gun", true, true);
+        check(t.action() == Action.RUN, "run_start enters run loop");
+        for (int i = 0; i < 10; i++) t.tick("gun", true, true);
+        check(t.action() == Action.RUN && Math.abs(t.progress(0.5f) - 0.5f) < 0.001f,
+                "run loops across multiple cycles with interpolated progress");
+        t.tick("gun", true, false);
+        check(t.action() == Action.RUN_HOLD, "airborne sprint holds gun");
+        t.tick("gun", true, true);
+        check(t.action() == Action.RUN, "landing resumes run");
+        t.tick("gun", false, true);
+        check(t.action() == Action.RUN_END && t.blend(0) == 0, "stopping plays blended run_end");
+        t.tick("gun", true, true);
+        check(t.action() == Action.RUN_START, "quick restart interrupts run_end");
+        check(t.trigger(Action.ATTACK), "attack interrupts locomotion");
+        for (int i = 0; i < 3; i++) t.tick("gun", true, true);
+        check(t.action() == Action.RUN_START, "sprint resumes after attack");
+        t.tick("empty", true, true);
+        check(t.action() == Action.PUT_AWAY, "switching while running retains put-away priority");
+        for (int i = 0; i < 4; i++) t.tick("empty", true, true);
+        check(t.action() == Action.IDLE, "unmapped selection cannot run");
+        t.reset();
+        check(t.previousAction() == Action.IDLE && t.blend(0) == 1, "reload clears movement blend");
+
+        var absent = new ItemAnimationTimeline<String>(String::equals, "gun"::equals,
+                (item, action) -> action.movement() ? 0 : 1);
+        for (int i = 0; i < 20; i++) absent.tick("gun", true, true);
+        check(absent.action() == Action.IDLE, "missing/disabled run does not enter movement states");
+        var loopOnly = new ItemAnimationTimeline<String>(String::equals, "gun"::equals,
+                (item, action) -> action.movement() && action != Action.RUN ? 0 : 2);
+        for (int i = 0; i < 3; i++) loopOnly.tick("gun", true, false);
+        check(loopOnly.action() == Action.RUN, "run works without optional start or airborne clips");
+        loopOnly.tick("gun", false, true);
+        check(loopOnly.action() == Action.IDLE, "missing run_end returns to idle");
+        var mapping = ClientItemOverride.fromJson(Identifier.parse("minecraft:crossbow"), JsonParser.parseString("""
+                {"gun":"tacz:ak47","actions":{"run":"","run_start":"raise","run_end":"lower","run_hold":"hold"}}
+                """).getAsJsonObject());
+        check(mapping.clip("run", "run").isEmpty(), "run can be disabled explicitly");
+        System.out.println("PASS: sprint start/loop/stop, airborne, interruption, missing clips and reset");
     }
 }

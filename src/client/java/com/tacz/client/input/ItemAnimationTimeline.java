@@ -15,6 +15,9 @@ public final class ItemAnimationTimeline<T> {
     private Action action = Action.IDLE;
     private int elapsed;
     private int length = 1;
+    private Action previousAction = Action.IDLE;
+    private float previousProgress;
+    private int blendElapsed = 4;
 
     public ItemAnimationTimeline(BiPredicate<T, T> same, Predicate<T> mapped,
                                  ToIntBiFunction<T, Action> duration) {
@@ -24,12 +27,17 @@ public final class ItemAnimationTimeline<T> {
     }
 
     public void tick(T selected) {
+        tick(selected, false, true);
+    }
+
+    public void tick(T selected, boolean sprinting, boolean grounded) {
         if (!initialized) {
             initialized = true;
             show(selected);
             return;
         }
         elapsed++;
+        blendElapsed++;
         if (action == Action.PUT_AWAY) {
             if (same.test(shown, selected)) {
                 // The user switched back before the old item disappeared.
@@ -46,7 +54,32 @@ public final class ItemAnimationTimeline<T> {
             return;
         }
         shown = selected; // Count, durability and other component changes are not equips.
-        if (action != Action.IDLE && elapsed >= length) start(Action.IDLE);
+        if (action.movement()) {
+            if (!sprinting && action != Action.RUN_END) {
+                start(available(Action.RUN_END) ? Action.RUN_END : Action.IDLE);
+            } else if (sprinting && action == Action.RUN_END) {
+                startRun(grounded);
+            } else if (action == Action.RUN_START && elapsed >= length) {
+                start(runLoop(grounded));
+            } else if (action == Action.RUN_END && elapsed >= length) {
+                start(Action.IDLE);
+            } else if (action == Action.RUN || action == Action.RUN_HOLD) {
+                Action loop = runLoop(grounded);
+                if (loop != action) start(loop);
+                else elapsed %= length;
+            }
+        } else {
+            if (action != Action.IDLE && elapsed >= length) start(Action.IDLE);
+            if (action == Action.IDLE && mapped.test(shown) && sprinting && available(Action.RUN)) startRun(grounded);
+        }
+    }
+
+    private boolean available(Action next) { return duration.applyAsInt(shown, next) > 0; }
+    private Action runLoop(boolean grounded) {
+        return !grounded && available(Action.RUN_HOLD) ? Action.RUN_HOLD : Action.RUN;
+    }
+    private void startRun(boolean grounded) {
+        start(available(Action.RUN_START) ? Action.RUN_START : runLoop(grounded));
     }
 
     private void show(T selected) {
@@ -55,6 +88,10 @@ public final class ItemAnimationTimeline<T> {
     }
 
     private void start(Action next) {
+        previousAction = action;
+        previousProgress = progress(0);
+        blendElapsed = (action.movement() || next.movement())
+                && next != Action.DRAW && next != Action.PUT_AWAY ? 0 : 4;
         action = next;
         elapsed = 0;
         length = Math.max(1, duration.applyAsInt(shown, next));
@@ -69,6 +106,15 @@ public final class ItemAnimationTimeline<T> {
 
     public T shownOr(T fallback) { return initialized ? shown : fallback; }
     public Action action() { return action; }
-    public float progress(float delta) { return Math.min(1f, (elapsed + delta) / length); }
-    public void reset() { initialized = false; shown = null; action = Action.IDLE; elapsed = 0; length = 1; }
+    public Action previousAction() { return previousAction; }
+    public float previousProgress() { return previousProgress; }
+    public float blend(float delta) { return Math.min(1f, (blendElapsed + delta) / 4f); }
+    public float progress(float delta) {
+        float time = elapsed + delta;
+        return action == Action.RUN || action == Action.RUN_HOLD ? (time % length) / length : Math.min(1f, time / length);
+    }
+    public void reset() {
+        initialized = false; shown = null; action = Action.IDLE; elapsed = 0; length = 1;
+        previousAction = Action.IDLE; previousProgress = 0; blendElapsed = 4;
+    }
 }

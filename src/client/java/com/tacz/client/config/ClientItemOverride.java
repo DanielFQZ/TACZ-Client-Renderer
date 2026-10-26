@@ -27,7 +27,8 @@ public record ClientItemOverride(
         java.util.Map<String, String> actions = new java.util.HashMap<>();
         if (json.has("actions")) {
             for (var entry : json.getAsJsonObject("actions").entrySet()) {
-                if (!java.util.Set.of("idle", "draw", "put_away", "attack", "mine", "use", "inspect", "reload").contains(entry.getKey())) {
+                if (!java.util.Set.of("idle", "draw", "put_away", "attack", "mine", "use", "inspect", "reload",
+                        "run_start", "run", "run_hold", "run_end").contains(entry.getKey())) {
                     throw new IllegalArgumentException("unknown local action: " + entry.getKey());
                 }
                 actions.put(entry.getKey(), entry.getValue().getAsString());
