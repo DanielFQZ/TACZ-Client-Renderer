@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "package": "com.tacz.client.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "HeldItemRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

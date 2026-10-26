@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/golden_hoe",
+  "texture": "minecraft:item/golden_hoe",
+  "animation": "tacz_tools:tools"
+}

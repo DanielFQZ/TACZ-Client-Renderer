@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/diamond_shovel",
+  "texture": "minecraft:item/diamond_shovel",
+  "animation": "tacz_tools:tools"
+}

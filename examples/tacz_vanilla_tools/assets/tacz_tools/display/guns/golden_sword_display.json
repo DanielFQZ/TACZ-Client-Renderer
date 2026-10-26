@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/golden_sword",
+  "texture": "minecraft:item/golden_sword",
+  "animation": "tacz_tools:tools"
+}

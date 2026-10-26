@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/wooden_shovel",
+  "texture": "minecraft:item/wooden_shovel",
+  "animation": "tacz_tools:tools"
+}

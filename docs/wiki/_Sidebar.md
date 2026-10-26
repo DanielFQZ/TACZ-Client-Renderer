@@ -1,0 +1,6 @@
+- [首页](https://github.com/DanielFQZ/TACZ-Client-Renderer/wiki/Home)
+- [安装](https://github.com/DanielFQZ/TACZ-Client-Renderer/wiki/Installation)
+- [物品映射](https://github.com/DanielFQZ/TACZ-Client-Renderer/wiki/Configuration)
+- [模型与动画](https://github.com/DanielFQZ/TACZ-Client-Renderer/wiki/Asset-Authoring)
+- [动作与示例](https://github.com/DanielFQZ/TACZ-Client-Renderer/wiki/Actions-and-Examples)
+- [排错与边界](https://github.com/DanielFQZ/TACZ-Client-Renderer/wiki/Troubleshooting-and-Limits)

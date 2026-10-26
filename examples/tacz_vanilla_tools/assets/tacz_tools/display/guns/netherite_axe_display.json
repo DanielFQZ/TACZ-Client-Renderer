@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/netherite_axe",
+  "texture": "minecraft:item/netherite_axe",
+  "animation": "tacz_tools:tools"
+}

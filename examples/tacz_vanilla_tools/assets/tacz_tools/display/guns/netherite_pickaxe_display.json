@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/netherite_pickaxe",
+  "texture": "minecraft:item/netherite_pickaxe",
+  "animation": "tacz_tools:tools"
+}

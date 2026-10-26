@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/iron_axe",
+  "texture": "minecraft:item/iron_axe",
+  "animation": "tacz_tools:tools"
+}

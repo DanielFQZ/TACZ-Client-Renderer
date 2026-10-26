@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/diamond_axe",
+  "texture": "minecraft:item/diamond_axe",
+  "animation": "tacz_tools:tools"
+}

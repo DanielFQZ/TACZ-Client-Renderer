@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/netherite_sword",
+  "texture": "minecraft:item/netherite_sword",
+  "animation": "tacz_tools:tools"
+}

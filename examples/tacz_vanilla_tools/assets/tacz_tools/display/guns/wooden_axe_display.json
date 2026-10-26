@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/wooden_axe",
+  "texture": "minecraft:item/wooden_axe",
+  "animation": "tacz_tools:tools"
+}

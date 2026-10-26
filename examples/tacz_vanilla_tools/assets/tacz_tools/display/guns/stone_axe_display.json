@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/stone_axe",
+  "texture": "minecraft:item/stone_axe",
+  "animation": "tacz_tools:tools"
+}

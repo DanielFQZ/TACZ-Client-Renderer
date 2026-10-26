@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/copper_axe",
+  "texture": "minecraft:item/copper_axe",
+  "animation": "tacz_tools:tools"
+}

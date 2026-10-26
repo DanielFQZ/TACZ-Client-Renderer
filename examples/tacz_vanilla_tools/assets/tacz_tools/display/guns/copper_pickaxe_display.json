@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/copper_pickaxe",
+  "texture": "minecraft:item/copper_pickaxe",
+  "animation": "tacz_tools:tools"
+}

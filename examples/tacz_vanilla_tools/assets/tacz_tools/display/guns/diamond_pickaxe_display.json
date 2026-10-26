@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/diamond_pickaxe",
+  "texture": "minecraft:item/diamond_pickaxe",
+  "animation": "tacz_tools:tools"
+}

@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/netherite_shovel",
+  "texture": "minecraft:item/netherite_shovel",
+  "animation": "tacz_tools:tools"
+}

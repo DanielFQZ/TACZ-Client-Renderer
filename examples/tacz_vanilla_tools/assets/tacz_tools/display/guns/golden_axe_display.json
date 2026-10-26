@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/golden_axe",
+  "texture": "minecraft:item/golden_axe",
+  "animation": "tacz_tools:tools"
+}

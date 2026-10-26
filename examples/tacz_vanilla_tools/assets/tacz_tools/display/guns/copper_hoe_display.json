@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/copper_hoe",
+  "texture": "minecraft:item/copper_hoe",
+  "animation": "tacz_tools:tools"
+}

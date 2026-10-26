@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/copper_sword",
+  "texture": "minecraft:item/copper_sword",
+  "animation": "tacz_tools:tools"
+}

@@ -1,0 +1,8 @@
+{
+  "pack": {
+    "description": "TACZ client: vanilla tool animation examples",
+    "pack_format": 88,
+    "min_format": 88,
+    "max_format": 999
+  }
+}

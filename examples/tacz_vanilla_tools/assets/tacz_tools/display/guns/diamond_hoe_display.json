@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/diamond_hoe",
+  "texture": "minecraft:item/diamond_hoe",
+  "animation": "tacz_tools:tools"
+}

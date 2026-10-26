@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/netherite_hoe",
+  "texture": "minecraft:item/netherite_hoe",
+  "animation": "tacz_tools:tools"
+}

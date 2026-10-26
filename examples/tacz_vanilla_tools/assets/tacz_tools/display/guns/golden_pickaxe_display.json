@@ -1,0 +1,5 @@
+{
+  "model": "tacz_tools:tools/golden_pickaxe",
+  "texture": "minecraft:item/golden_pickaxe",
+  "animation": "tacz_tools:tools"
+}

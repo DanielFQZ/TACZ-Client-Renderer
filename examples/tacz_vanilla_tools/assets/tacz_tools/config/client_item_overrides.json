@@ -1,0 +1,494 @@
+{
+  "items": {
+    "minecraft:copper_axe": {
+      "display": "tacz_tools:copper_axe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:copper_hoe": {
+      "display": "tacz_tools:copper_hoe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:copper_pickaxe": {
+      "display": "tacz_tools:copper_pickaxe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:copper_shovel": {
+      "display": "tacz_tools:copper_shovel_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:copper_sword": {
+      "display": "tacz_tools:copper_sword_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:diamond_axe": {
+      "display": "tacz_tools:diamond_axe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:diamond_hoe": {
+      "display": "tacz_tools:diamond_hoe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:diamond_pickaxe": {
+      "display": "tacz_tools:diamond_pickaxe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:diamond_shovel": {
+      "display": "tacz_tools:diamond_shovel_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:diamond_sword": {
+      "display": "tacz_tools:diamond_sword_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:golden_axe": {
+      "display": "tacz_tools:golden_axe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:golden_hoe": {
+      "display": "tacz_tools:golden_hoe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:golden_pickaxe": {
+      "display": "tacz_tools:golden_pickaxe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:golden_shovel": {
+      "display": "tacz_tools:golden_shovel_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:golden_sword": {
+      "display": "tacz_tools:golden_sword_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:iron_axe": {
+      "display": "tacz_tools:iron_axe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:iron_hoe": {
+      "display": "tacz_tools:iron_hoe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:iron_pickaxe": {
+      "display": "tacz_tools:iron_pickaxe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:iron_shovel": {
+      "display": "tacz_tools:iron_shovel_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:iron_sword": {
+      "display": "tacz_tools:iron_sword_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:netherite_axe": {
+      "display": "tacz_tools:netherite_axe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:netherite_hoe": {
+      "display": "tacz_tools:netherite_hoe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:netherite_pickaxe": {
+      "display": "tacz_tools:netherite_pickaxe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:netherite_shovel": {
+      "display": "tacz_tools:netherite_shovel_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:netherite_sword": {
+      "display": "tacz_tools:netherite_sword_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:stone_axe": {
+      "display": "tacz_tools:stone_axe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:stone_hoe": {
+      "display": "tacz_tools:stone_hoe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:stone_pickaxe": {
+      "display": "tacz_tools:stone_pickaxe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:stone_shovel": {
+      "display": "tacz_tools:stone_shovel_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:stone_sword": {
+      "display": "tacz_tools:stone_sword_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:wooden_axe": {
+      "display": "tacz_tools:wooden_axe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:wooden_hoe": {
+      "display": "tacz_tools:wooden_hoe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:wooden_pickaxe": {
+      "display": "tacz_tools:wooden_pickaxe_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:wooden_shovel": {
+      "display": "tacz_tools:wooden_shovel_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    },
+    "minecraft:wooden_sword": {
+      "display": "tacz_tools:wooden_sword_display",
+      "actions": {
+        "idle": "static_idle",
+        "draw": "draw",
+        "put_away": "put_away",
+        "attack": "swing",
+        "mine": "dig",
+        "use": "use",
+        "inspect": "inspect",
+        "reload": ""
+      },
+      "enabled": false
+    }
+  }
+}
