@@ -99,6 +99,9 @@ public final class RendererRegressionTest {
                 new Class<?>[]{nested("AnimationClip"), float.class, float.class}, idleLayer, 0f, 0.5f);
         same(channel(blended,"hand","position",0), new float[]{3,4.5f,6});
         same(channel(blended,"hand","rotation",0), new float[]{90,0,10});
+        Object baseAt = call(added, nested("AnimationClip"), "withBaseAt",
+                new Class<?>[]{nested("AnimationClip"), boolean.class, float.class}, idleLayer, true, 0.5f);
+        same(channel(baseAt,"hand","position",0), new float[]{5,7,9});
         Object defaults = construct("Animation", new Class<?>[]{Map.class}, Map.of("run", added, "shoot", added));
         Object primary = construct("Animation", new Class<?>[]{Map.class, nested("Animation")},
                 Map.of("shoot", partialLayer), defaults);

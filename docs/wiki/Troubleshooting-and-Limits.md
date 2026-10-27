@@ -21,6 +21,7 @@
 检查动作名与 clip 名是否一致、animation 文件路径、骨骼名及正数 animation_length。
 默认工具不会使用枪械 reload；use 依赖原版使用或挥动反馈。切换物品的 draw/put_away 阶段会保护切换过程，阻止其他动作打断。
 AK 有模型但不播放疾跑动画时，请使用 0.1.1 或更新版本，并检查资源包是否提供 display 引用的缺省动画。原 AK 的 `use_default_animation: rifle` 需要额外的 `assets/tacz/animations/rifle_default.animation.json`，模组不会内置或自动下载；详见[动作与示例](https://github.com/DanielFQZ/TACZ-Client-Renderer/wiki/Actions-and-Examples)。
+疾跑中切换物品仍然突兀时，请确认使用 0.1.2 或更新版本；该版本会像 TACZ 一样保留独立的移动叠加轨道，并按 `put_away_time × 0.75` 过渡主轨道。
 
 ## 当前已验证与未实现
 

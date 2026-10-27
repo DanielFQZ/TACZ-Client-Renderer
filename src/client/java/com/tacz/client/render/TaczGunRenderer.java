@@ -78,13 +78,29 @@ public final class TaczGunRenderer {
         // draw/reload/inspect replace only the channels they actually animate.
         AnimationClip animation = layer(stack, selected, base, action);
         float animationTime = selected == null ? 0 : ClientActionController.progress(tickDelta) * selected.length;
-        if (definition != null && animation != null && ClientActionController.blend(tickDelta) < 1) {
+        if (definition != null && animation != null && ClientActionController.blend(tickDelta) < 1
+                && !(action == ClientActionController.Action.PUT_AWAY
+                && ClientActionController.previousAction().movement())) {
             var previousAction = ClientActionController.previousAction();
             AnimationClip previous = previousAction == ClientActionController.Action.IDLE
                     ? null : definition.clip(clipName(stack, previousAction));
             float previousTime = previous == null ? 0 : ClientActionController.previousProgress() * previous.length;
             animation = animation.blendFrom(layer(stack, previous, base, previousAction), previousTime,
                     ClientActionController.blend(tickDelta));
+        }
+        // TACZ keeps the movement track alive while the main track plays put_away.
+        // Keep that track additive so a sprinting gun lowers without snapping out of
+        // its running pose. The main put-away animation remains the authoritative
+        // transition and is sampled as the overlay base at the current time.
+        if (definition != null && animation != null && action == ClientActionController.Action.PUT_AWAY
+                && ClientActionController.previousAction().movement()) {
+            AnimationClip movement = definition.clip(clipName(stack, ClientActionController.previousAction()));
+            if (movement != null) {
+                float movementTime = (ClientActionController.previousProgress() * movement.length
+                        + animationTime) % movement.length;
+                animation = movement.withBaseAt(animation, true, animationTime);
+                animationTime = movementTime;
+            }
         }
         float scale = firstPersonScale(json);
         poseStack.pushPose();
@@ -451,22 +467,27 @@ public final class TaczGunRenderer {
 
     private record AnimationClip(float length, Map<String, BoneAnimation> bones,
                                  AnimationClip base, boolean additive,
+                                 float baseTime,
                                  AnimationClip previous, float previousTime, float weight) {
         private AnimationClip(float length, Map<String, BoneAnimation> bones) {
-            this(length, bones, null, false, null, 0, 1);
+            this(length, bones, null, false, 0, null, 0, 1);
         }
 
         private AnimationClip withBase(AnimationClip base, boolean additive) {
-            return new AnimationClip(length, bones, base, additive, null, 0, 1);
+            return new AnimationClip(length, bones, base, additive, 0, null, 0, 1);
+        }
+
+        private AnimationClip withBaseAt(AnimationClip base, boolean additive, float baseTime) {
+            return new AnimationClip(length, bones, base, additive, baseTime, null, 0, 1);
         }
 
         private AnimationClip blendFrom(AnimationClip previous, float time, float weight) {
-            return new AnimationClip(length, bones, base, additive, previous, time, weight);
+            return new AnimationClip(length, bones, base, additive, baseTime, previous, time, weight);
         }
 
         private BoneTransform transform(String bone, float time) {
             BoneAnimation animation = bones.get(bone);
-            BoneTransform rest = base == null ? null : base.transform(bone, 0);
+            BoneTransform rest = base == null ? null : base.transform(bone, baseTime);
             BoneTransform result = animation == null ? rest : animation.sample(time, rest, additive);
             if (weight >= 1) return result;
             BoneTransform from = previous == null ? null : previous.transform(bone, previousTime);

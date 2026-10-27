@@ -35,6 +35,8 @@ run 必须存在才能启用这组状态；起跑、腾空、停跑片段可以�
 疾跑动画按 TACZ 的移动叠加轨道处理，保留 static_idle 手臂姿势；状态之间使用短过渡。掏出/收起、攻击、挖掘、使用、检视、换弹优先，完成后若仍在疾跑则恢复。
 当前按动画时长循环，尚未复刻 TACZ 按步行距离同步的步频，也不执行其移动 Lua 状态机或普通行走/战术冲刺分支。
 
+0.1.2 起，切换物品时会保留当前的移动叠加轨道，让 `put_away` 主轨道与 `run`/`run_hold` 同时过渡；主轨道的切入使用 `put_away` 时长的 75% 和 TACZ 同款 ease-out cubic 曲线。这样疾跑中切换物品时，跑步姿势会连续收下，而不是直接跳到收枪第一帧。
+
 沿用原 TACZ display 的两个字段，无需修改资产结构：
 
 - `"default_animation":"my_pack:common"`：从 `assets/my_pack/animations/common.animation.json` 补齐缺失 clip。
