@@ -81,6 +81,8 @@ final class ItemAnimationRegressionTest {
         check(t.action() == Action.RUN, "landing resumes run");
         t.tick("gun", false, true);
         check(t.action() == Action.RUN_END && t.blend(0) == 0, "stopping plays blended run_end");
+        check(t.blend(3.0f / 20.0f) > 0 && t.blend(3.0f / 20.0f) < 1,
+                "movement transitions use a gradual blend");
         t.tick("gun", true, true);
         check(t.action() == Action.RUN_START, "quick restart interrupts run_end");
         check(t.trigger(Action.ATTACK), "attack interrupts locomotion");

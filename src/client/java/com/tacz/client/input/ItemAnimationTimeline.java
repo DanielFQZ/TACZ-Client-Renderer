@@ -18,6 +18,7 @@ public final class ItemAnimationTimeline<T> {
     private Action previousAction = Action.IDLE;
     private float previousProgress;
     private int blendElapsed = 4;
+    private int blendLength = 4;
 
     public ItemAnimationTimeline(BiPredicate<T, T> same, Predicate<T> mapped,
                                  ToIntBiFunction<T, Action> duration) {
@@ -90,11 +91,21 @@ public final class ItemAnimationTimeline<T> {
     private void start(Action next) {
         previousAction = action;
         previousProgress = progress(0);
-        blendElapsed = (action.movement() || next.movement())
-                && next != Action.DRAW && next != Action.PUT_AWAY ? 0 : 4;
         action = next;
         elapsed = 0;
         length = Math.max(1, duration.applyAsInt(shown, next));
+        blendElapsed = 0;
+        blendLength = transitionTicks(next);
+        if (next == Action.DRAW || (next == Action.PUT_AWAY && !previousAction.movement())) {
+            blendElapsed = blendLength;
+        }
+    }
+
+    private int transitionTicks(Action next) {
+        if (next == Action.PUT_AWAY) return Math.max(1, (int) Math.ceil(length * 0.75));
+        if (next == Action.RUN_END) return 6; // TACZ default_state_machine uses 0.3 s.
+        if (next == Action.RUN_START || next == Action.RUN_HOLD) return 4; // 0.2 s.
+        return 4;
     }
 
     public boolean trigger(Action next) {
@@ -108,13 +119,18 @@ public final class ItemAnimationTimeline<T> {
     public Action action() { return action; }
     public Action previousAction() { return previousAction; }
     public float previousProgress() { return previousProgress; }
-    public float blend(float delta) { return Math.min(1f, (blendElapsed + delta) / 4f); }
+    public float blend(float delta) {
+        float linear = Math.min(1f, (blendElapsed + delta) / blendLength);
+        // ObjectAnimationRunner uses easeOutCubic for channel transitions.
+        float inverse = 1f - linear;
+        return 1f - inverse * inverse * inverse;
+    }
     public float progress(float delta) {
         float time = elapsed + delta;
         return action == Action.RUN || action == Action.RUN_HOLD ? (time % length) / length : Math.min(1f, time / length);
     }
     public void reset() {
         initialized = false; shown = null; action = Action.IDLE; elapsed = 0; length = 1;
-        previousAction = Action.IDLE; previousProgress = 0; blendElapsed = 4;
+        previousAction = Action.IDLE; previousProgress = 0; blendElapsed = blendLength = 4;
     }
 }
